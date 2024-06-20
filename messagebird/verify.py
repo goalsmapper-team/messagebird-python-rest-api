@@ -7,6 +7,7 @@ class Verify(Base):
         self.href = None
         self.recipient = None
         self.reference = None
+        self.token = None
         self.messages = None
         self.status = None
         self._createdDatetime = None
