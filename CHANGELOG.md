@@ -1,4 +1,7 @@
 # Changelog
+## 2.2.0
+
+* [Added] Token parameter to Verify Object
 ## 2.1.0
 
 * [ADDED] Support for JWT webhook signature.
