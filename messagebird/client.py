@@ -34,6 +34,7 @@ CONVERSATION_API_ROOT = 'https://conversations.messagebird.com/v1/'
 CONVERSATION_PATH = 'conversations'
 CONVERSATION_MESSAGES_PATH = 'messages'
 CONVERSATION_WEB_HOOKS_PATH = 'webhooks'
+CONVERSATION_SEND_PATH = "send"
 CONVERSATION_TYPE = 'conversation'
 CONVERSATION_SEND_PATH = 'send'
 
@@ -347,8 +348,13 @@ class Client(object):
         self.request_plain_text('groups/' + str(id), 'PATCH', params)
 
     def group_add_contacts(self, groupId, contactIds):
-        query = self.__group_add_contacts_query(contactIds)
-        self.request_plain_text('groups/' + str(groupId) + '?' + query, 'PUT', None)
+        # query = self.__group_add_contacts_query(contactIds)
+        params = {}
+        params.update({
+            'groupId': groupId,
+            'ids': contactIds
+        })
+        return self.request_plain_text('groups/' + str(groupId) + '/contacts', 'PUT', params)
 
     def __group_add_contacts_query(self, contactIds):
         # __group_add_contacts_query gets a query string to add contacts to a
@@ -357,7 +363,7 @@ class Client(object):
         return '&'.join('ids[]=' + str(id) for id in contactIds)
 
     def group_remove_contact(self, groupId, contactId):
-        self.request_plain_text('groups/' + str(groupId) + '/contacts/' + str(contactId), 'DELETE', None)
+        return self.request_plain_text('groups/' + str(groupId) + '/contacts/' + str(contactId), 'DELETE', None)
 
     def conversation_list(self, limit=10, offset=0):
         uri = CONVERSATION_PATH + '?' + self._format_query(limit, offset)
