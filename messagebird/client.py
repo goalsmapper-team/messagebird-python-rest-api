@@ -35,6 +35,7 @@ CONVERSATION_PATH = 'conversations'
 CONVERSATION_MESSAGES_PATH = 'messages'
 CONVERSATION_WEB_HOOKS_PATH = 'webhooks'
 CONVERSATION_TYPE = 'conversation'
+CONVERSATION_SEND_PATH = 'send'
 
 VOICE_API_ROOT = 'https://voice.messagebird.com'
 VOICE_TYPE = 'voice'
@@ -373,6 +374,17 @@ class Client(object):
     def conversation_read(self, id):
         uri = CONVERSATION_PATH + '/' + str(id)
         return Conversation().load(self.request(uri, 'GET', None, CONVERSATION_TYPE))
+
+    def conversation_send(self, params={}):
+        """
+        This method sends a message via /conversations/send endpoint.
+        Reference: https://developers.messagebird.com/api/conversations/#send-message
+        """
+        assert "to" in params, "to is required"
+        assert "from" in params, "from is required"
+        assert "type" in params, "type is required"
+        assert "content" in params, "content is required"
+        return self.request(CONVERSATION_SEND_PATH, "POST", params, CONVERSATION_TYPE)
 
     def conversation_list_messages(self, conversation_id, limit=10, offset=0):
         uri = CONVERSATION_PATH + '/' + str(conversation_id) + '/' + CONVERSATION_MESSAGES_PATH
